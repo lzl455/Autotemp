@@ -624,6 +624,9 @@ __attribute__((noinline)) void hid_process(void)
                 in_report_data[0x10] = flash_fifo[1];
                 in_report_data[0x11] = flash_fifo[0];
                 memcpy(in_report_data+0x12, flash_fifo+4, 12);
+                // 升级工具对0x73类设备的"程序版本"第三段取 [0x15]<<8|[0x14]，
+                // 这里放入版本号低字节，使自动升级的FWID能区分新旧固件
+                in_report_data[0x14] = flash_fifo[5];
 
                 m_data_flag |= bhid_data_send;
             }
